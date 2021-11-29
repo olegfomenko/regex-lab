@@ -1,3 +1,3 @@
 4; asd-1 ; 11;  asdasded23123'' -asd ; fio;  foo; 3 ;  2;1111
-4; asd-1 ; 11;  asdasded23123'' -asd ; fio;  foo; 3 ;  2;1111
-4; asd-1 ; 11;  asdasded23123'' -asd ; fio;  foo; 3 ;  2;1111
+4; a--1 ; 11;  a''''sded23123'' -asd ; fomenko;  oleh; 3 ;  2;1
+4; a-10 ; 11;  asdasded23123'' -asd ; fififi;  fofofof; 3 ;  2;3131
