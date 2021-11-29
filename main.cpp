@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Order of regexes with field names (for clear code understanding)
 const pair<string, string> parts[] = {
         {"([1-4])",                        "Year"},
         {"([a-zA-Z]|[0-9]|\\-){1,6}",      "Group"},
@@ -21,17 +22,26 @@ const pair<string, string> parts[] = {
 const string separator = "([;\\:\\?])";
 const string whitespace = "(\\s*)";
 
+// Id of Subject type part (according to the 38-th variant)
 const int REMOVE_PART = 6;
+
+// Buffer wile for storing intermediate result
 const string TMP_FILE = "temp.txt";
 
+// Crating full regex from parts (with whitespaces and separators)
 inline regex make_regex(int start = 0);
 
+// Checking if all file lines match the pattern
 bool is_file_matched(const regex &match_regex, const string &path);
 
+// Removing suffix with partial saving.
+// !!! save_regex should be a sub-regex of remove_regex
 void
-remove_suffix_with_save(const regex &replace_regex, const regex &save_regex, const string &input_path,
+remove_suffix_with_save(const regex &remove_regex, const regex &save_regex, const string &input_path,
                         const string &output_path);
 
+
+// Replace regex with string
 void
 replace(const regex &replace_regex, const string &replace_str, const string &input_path, const string &output_path);
 
@@ -53,11 +63,15 @@ int main() {
         return 0;
     }
 
+    // Regex for removing REMOVE_PART...end suffix
     regex remove_regex = make_regex(REMOVE_PART);
+
+    // Regex for saving REMOVE_PART+1...end
     regex save_regex = make_regex(REMOVE_PART + 1);
 
     remove_suffix_with_save(remove_regex, save_regex, input_file, TMP_FILE);
 
+    // Regex for replacing separator
     regex replace_separator(separator);
     replace(regex(separator), ";", TMP_FILE, output_file);
 
@@ -99,7 +113,7 @@ bool is_file_matched(const regex &match_regex, const string &path) {
 }
 
 void
-remove_suffix_with_save(const regex &replace_regex, const regex &save_regex, const string &input_path,
+remove_suffix_with_save(const regex &remove_regex, const regex &save_regex, const string &input_path,
                         const string &output_path) {
     ifstream input_file(input_path);
     ofstream output_file(output_path);
@@ -113,7 +127,7 @@ remove_suffix_with_save(const regex &replace_regex, const regex &save_regex, con
         regex_search(input_line, match, save_regex);
         string to_save = match[0];
 
-        output_line = regex_replace(input_line, replace_regex, "");
+        output_line = regex_replace(input_line, remove_regex, "");
         output_line += to_save;
 
         if (!output_line.empty()) output_file << output_line << '\n';
